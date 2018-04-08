@@ -7,9 +7,8 @@ var express = require('express');
 // 加载模板处理模块
 var swig = require('swig');
 // 加载数据库模块
-// var sqlite = require('sqlite3');
-// var dbPath = './db/';
 var user = require('./models/user');
+var equipment = require('./models/equipment');
 // 加载body-parser，用来处理post提交过来的数据
 var bodyParser = require('body-parser');
 // 创建app应用
@@ -66,8 +65,9 @@ app.use('/admin', require('./routers/admin'));
 app.use('/api', require('./routers/api'));
 app.use('/', require('./routers/main'));
 
-// 连接数据库,创建用户表
+// 连接数据库,创建用户表，设备表
 user.createUser();
+equipment.createEquipment();
 
 // 监听http请求
 console.log('启动服务器');

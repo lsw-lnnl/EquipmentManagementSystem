@@ -64,6 +64,38 @@ router.post('/user/login',function (req, res) {
             res.json(responseData);
         }
     });
-})
+});
+
+/**
+ * 修改密码
+ */
+router.post('/user/modify',function (req, res) { 
+    let username = req.body.username; 
+    let oldPasswd = req.body.oldPassword;
+    let newPasswd = req.body.newPassword;
+
+    // 从数据库中查询相同用户名和密码的记录是否存在,如果存在,则登陆成功
+    user.haveUser(username, function (haved, data) {
+        if(haved){
+            if(data.password === oldPasswd){
+                user.modify(username, newPasswd, function(err){
+                    if(err){
+                        responseData.code = 1;
+                        responseData.message = '错误';
+                    }else{
+                        
+                        responseData.code = 0;
+                        responseData.message = '密码修改成功';
+                    }
+                    res.json(responseData);                                                 
+                });
+            }else{
+                responseData.code = 2;
+                responseData.message = '旧密码错误';
+                res.json(responseData);    
+            }        
+        }
+    });
+});
 
 module.exports = router;
